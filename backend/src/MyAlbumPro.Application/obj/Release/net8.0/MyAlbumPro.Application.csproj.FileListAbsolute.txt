@@ -1,0 +1,15 @@
+C:\Users\matheus.cataneo\MyAlbumPro\backend\src\MyAlbumPro.Application\bin\Release\net8.0\MyAlbumPro.Application.deps.json
+C:\Users\matheus.cataneo\MyAlbumPro\backend\src\MyAlbumPro.Application\bin\Release\net8.0\MyAlbumPro.Application.dll
+C:\Users\matheus.cataneo\MyAlbumPro\backend\src\MyAlbumPro.Application\bin\Release\net8.0\MyAlbumPro.Application.pdb
+C:\Users\matheus.cataneo\MyAlbumPro\backend\src\MyAlbumPro.Application\bin\Release\net8.0\MyAlbumPro.Domain.dll
+C:\Users\matheus.cataneo\MyAlbumPro\backend\src\MyAlbumPro.Application\bin\Release\net8.0\MyAlbumPro.Domain.pdb
+C:\Users\matheus.cataneo\MyAlbumPro\backend\src\MyAlbumPro.Application\obj\Release\net8.0\MyAlbumPro.Application.csproj.AssemblyReference.cache
+C:\Users\matheus.cataneo\MyAlbumPro\backend\src\MyAlbumPro.Application\obj\Release\net8.0\MyAlbumPro.Application.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\matheus.cataneo\MyAlbumPro\backend\src\MyAlbumPro.Application\obj\Release\net8.0\MyAlbumPro.Application.AssemblyInfoInputs.cache
+C:\Users\matheus.cataneo\MyAlbumPro\backend\src\MyAlbumPro.Application\obj\Release\net8.0\MyAlbumPro.Application.AssemblyInfo.cs
+C:\Users\matheus.cataneo\MyAlbumPro\backend\src\MyAlbumPro.Application\obj\Release\net8.0\MyAlbumPro.Application.csproj.CoreCompileInputs.cache
+C:\Users\matheus.cataneo\MyAlbumPro\backend\src\MyAlbumPro.Application\obj\Release\net8.0\MyAlbumP.1C07526F.Up2Date
+C:\Users\matheus.cataneo\MyAlbumPro\backend\src\MyAlbumPro.Application\obj\Release\net8.0\MyAlbumPro.Application.dll
+C:\Users\matheus.cataneo\MyAlbumPro\backend\src\MyAlbumPro.Application\obj\Release\net8.0\refint\MyAlbumPro.Application.dll
+C:\Users\matheus.cataneo\MyAlbumPro\backend\src\MyAlbumPro.Application\obj\Release\net8.0\MyAlbumPro.Application.pdb
+C:\Users\matheus.cataneo\MyAlbumPro\backend\src\MyAlbumPro.Application\obj\Release\net8.0\ref\MyAlbumPro.Application.dll

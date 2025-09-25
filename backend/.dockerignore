@@ -1,0 +1,22 @@
+# General
+.git
+.gitignore
+.vs
+.vscode
+**/*.user
+**/*.suo
+
+# Build outputs
+**/bin
+**/obj
+**/out
+
+# Test results
+**/TestResults
+
+# OS / IDE junk
+*.DS_Store
+*.swp
+*.swx
+Thumbs.db
+
