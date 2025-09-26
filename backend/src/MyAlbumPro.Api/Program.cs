@@ -1,4 +1,4 @@
-﻿using System.Text;
+using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -81,7 +81,7 @@ app.UseCors("spa");
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.MapApiEndpoints();
+app.MapApiEndpoints(app.Environment);
 
 app.Run();
 

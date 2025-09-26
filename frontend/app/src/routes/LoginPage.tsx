@@ -1,4 +1,4 @@
-﻿import { useEffect, useMemo, useState } from 'react';
+﻿import { useEffect, useMemo, useState, type FormEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useGoogleLogin, type TokenResponse } from '@react-oauth/google';
 import { api, ApiError } from '../lib/api';
@@ -82,6 +82,8 @@ function LoginPage() {
   const { user, isLoading, setUser } = useAuth();
   const [error, setError] = useState<string | null>(null);
   const [isAuthenticating, setIsAuthenticating] = useState(false);
+  const [devEmail, setDevEmail] = useState('');
+  const [devName, setDevName] = useState('');
 
   const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID ?? '';
   const isClientConfigured = useMemo(() => clientId.trim().length > 0 && !clientId.startsWith('missing'), [clientId]);
@@ -116,7 +118,7 @@ function LoginPage() {
         if (err instanceof ApiError) {
           setError(err.message);
         } else {
-          setError('Erro inesperado ao autenticar. Tente novamente.');
+          setError('Falha ao autenticar com o servidor.');
         }
       } finally {
         setIsAuthenticating(false);
@@ -124,8 +126,27 @@ function LoginPage() {
     },
   });
 
+  const handleDevLogin = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    setError(null);
+    setIsAuthenticating(true);
+    try {
+      const authenticated = await api.devSignIn({ email: devEmail, name: devName });
+      setUser(authenticated);
+      navigate('/projects', { replace: true });
+    } catch (err) {
+      if (err instanceof ApiError) {
+        setError('Modo desenvolvimento indisponivel. Ajuste o backend ou tente novamente.');
+      } else {
+        setError('Nao foi possivel autenticar em modo desenvolvimento.');
+      }
+    } finally {
+      setIsAuthenticating(false);
+    }
+  };
+
   return (
-    <div className="relative min-h-screen bg-slate-950 text-slate-100">
+    <div className="relative min-h-screen overflow-hidden bg-slate-950">
       <div className="absolute -left-32 top-[-4rem] h-80 w-80 rounded-full bg-emerald-500/20 blur-3xl" />
       <div className="absolute right-[-8rem] top-48 h-72 w-72 rounded-full bg-cyan-500/10 blur-3xl" />
       <div className="relative flex min-h-screen flex-col lg:flex-row">
@@ -167,7 +188,7 @@ function LoginPage() {
                 <CameraMark />
               </div>
               <div className="space-y-2">
-                <h2 className="text-2xl font-semibold text-white">Acesse com sua conta Google</h2>
+                <h2 className="text-2xl font-semibold text-white">Acesse com sua conta</h2>
                 <p className="text-sm text-slate-400">
                   Centralize bibliotecas, layouts, exportacoes e acompanhe o status de cada album em um painel unico.
                 </p>
@@ -186,9 +207,46 @@ function LoginPage() {
                 {isAuthenticating ? 'Conectando...' : 'Entrar com Google'}
               </button>
               {!isClientConfigured ? (
-                <p className="rounded-lg border border-amber-500/40 bg-amber-500/10 px-4 py-3 text-sm text-amber-200">
-                  Defina a variavel <code className="font-mono text-xs">VITE_GOOGLE_CLIENT_ID</code> para habilitar o login.
-                </p>
+                <div className="space-y-3 rounded-lg border border-slate-800 bg-slate-950/60 p-4">
+                  <p className="text-sm text-slate-300">
+                    Sem client id configurado, utilize o modo desenvolvimento para testar rapidamente.
+                  </p>
+                  <form onSubmit={handleDevLogin} className="space-y-3">
+                    <div className="space-y-2">
+                      <label className="text-xs font-semibold uppercase tracking-wide text-slate-400" htmlFor="dev-email">
+                        Email
+                      </label>
+                      <input
+                        id="dev-email"
+                        type="email"
+                        value={devEmail}
+                        onChange={(event) => setDevEmail(event.target.value)}
+                        placeholder="dev@local.test"
+                        className="w-full rounded-lg border border-slate-800 bg-slate-900 px-3 py-2 text-sm text-slate-100 focus:border-emerald-400 focus:outline-none"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <label className="text-xs font-semibold uppercase tracking-wide text-slate-400" htmlFor="dev-name">
+                        Nome
+                      </label>
+                      <input
+                        id="dev-name"
+                        type="text"
+                        value={devName}
+                        onChange={(event) => setDevName(event.target.value)}
+                        placeholder="Desenvolvedor"
+                        className="w-full rounded-lg border border-slate-800 bg-slate-900 px-3 py-2 text-sm text-slate-100 focus:border-emerald-400 focus:outline-none"
+                      />
+                    </div>
+                    <button
+                      type="submit"
+                      disabled={isAuthenticating}
+                      className="w-full rounded-lg border border-emerald-500/40 bg-emerald-500/15 px-4 py-2 text-sm font-medium text-emerald-200 transition hover:border-emerald-400 hover:bg-emerald-500/20 disabled:cursor-progress"
+                    >
+                      {isAuthenticating ? 'Conectando...' : 'Entrar em modo desenvolvimento'}
+                    </button>
+                  </form>
+                </div>
               ) : null}
             </div>
             {error ? (
@@ -211,13 +269,4 @@ function LoginPage() {
 }
 
 export default LoginPage;
-
-
-
-
-
-
-
-
-
 

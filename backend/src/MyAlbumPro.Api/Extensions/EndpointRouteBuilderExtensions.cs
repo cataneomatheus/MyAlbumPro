@@ -1,13 +1,17 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
+using Microsoft.Extensions.Hosting;
 using MyAlbumPro.Application.Abstractions.Auth;
 using MyAlbumPro.Application.Abstractions.Storage;
+using MyAlbumPro.Application.Common.Utilities;
 using MyAlbumPro.Application.Features.Albums.Queries;
 using MyAlbumPro.Application.Features.Assets.Commands;
 using MyAlbumPro.Application.Features.Assets.Queries;
 using MyAlbumPro.Application.Features.Auth.Commands;
+using MyAlbumPro.Application.Features.Auth.Dtos;
 using MyAlbumPro.Application.Features.Layouts.Queries;
 using MyAlbumPro.Application.Features.Projects.Commands;
 using MyAlbumPro.Application.Features.Projects.Queries;
@@ -16,13 +20,32 @@ namespace MyAlbumPro.Api.Extensions;
 
 public static class EndpointRouteBuilderExtensions
 {
-    public static IEndpointRouteBuilder MapApiEndpoints(this IEndpointRouteBuilder builder)
+    public static IEndpointRouteBuilder MapApiEndpoints(this IEndpointRouteBuilder builder, IWebHostEnvironment environment)
     {
         builder.MapPost("/auth/google/callback", async (GoogleSignInCommand command, IMediator mediator) =>
         {
             var response = await mediator.Send(command);
             return Results.Ok(response);
         });
+
+        if (environment.IsDevelopment())
+        {
+            builder.MapPost("/auth/dev-login", (DevLoginRequest request, ITokenService tokenService) =>
+            {
+                var email = string.IsNullOrWhiteSpace(request.Email)
+                    ? "dev@local.test"
+                    : request.Email.Trim().ToLowerInvariant();
+
+                var name = string.IsNullOrWhiteSpace(request.Name)
+                    ? "Desenvolvedor"
+                    : request.Name.Trim();
+
+                var userId = DeterministicGuid.FromString(email);
+                var token = tokenService.Generate(userId, email, name, string.Empty, Array.Empty<string>());
+
+                return Results.Ok(new AuthResponse(userId, token.AccessToken, token.ExpiresAt, name, email, string.Empty));
+            });
+        }
 
         builder.MapPost("/auth/signout", () => Results.NoContent())
             .RequireAuthorization();
@@ -142,3 +165,5 @@ public static class EndpointRouteBuilderExtensions
         return builder;
     }
 }
+
+public sealed record DevLoginRequest(string Email, string Name);

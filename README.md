@@ -1,4 +1,4 @@
-# MyAlbumPro
+﻿# MyAlbumPro
 
 MyAlbumPro e uma aplicacao full-stack para criacao e gerenciamento de albuns fotografico-profissionais. O backend utiliza .NET 8, PostgreSQL e MinIO (compatibilidade S3) para armazenar dados e imagens. O frontend e uma SPA moderna em React com Vite.
 
@@ -6,7 +6,7 @@ MyAlbumPro e uma aplicacao full-stack para criacao e gerenciamento de albuns fot
 - **API (.NET 8 / Minimal APIs)**: autenticacao com Google, emissao de JWT, endpoints REST para projetos, layouts e assets.
 - **Aplicacao frontend (React + Vite + Tailwind)**: interface responsiva para login, gerenciamento de projetos e visualizacao dos albuns.
 - **PostgreSQL**: banco relacional principal.
-- **MinIO**: armazenamento de objetos (originais e miniaturas) compat�vel com AWS S3.
+- **MinIO**: armazenamento de objetos (originais e miniaturas) compatível com AWS S3.
 - **pgAdmin**: console opcional para inspecionar o PostgreSQL via navegador.
 
 ## Requisitos locais
@@ -27,7 +27,9 @@ As variaveis sao definidas em `docker-compose.yml`. Ajuste conforme necessario:
 | postgres  | `POSTGRES_USER/PASSWORD`    | Credenciais do banco                              | `postgres` / `postgres`                       |
 | pgadmin   | `PGADMIN_DEFAULT_EMAIL` etc | Credenciais do pgAdmin                            | `admin@local.test` / `admin`                  |
 
-> Importante: para login real com Google configure `Google__ClientId` (backend) e `VITE_GOOGLE_CLIENT_ID` (frontend) com um client id valido criado no Google Cloud Console.
+> Importante: para login real com Google configure
+
+> Desenvolvimento: quando o ambiente esta em `Development`, a API expõe `/auth/dev-login`, permitindo autenticar com email/nome ficticios diretamente pelo formulario da tela de login. Configure o OAuth real somente quando for conectar com o Google.`r`n`r`n `Google__ClientId` (backend) e `VITE_GOOGLE_CLIENT_ID` (frontend) com um client id valido criado no Google Cloud Console.
 
 ## Subir toda a stack
 ```bash
@@ -78,8 +80,8 @@ O resultado e gerado em `frontend/app/dist`. O Dockerfile do frontend ja realiza
 ## Fluxo basico de uso
 1. Suba a stack com `docker compose up -d --build`.
 2. Acesse o frontend em http://localhost:8081.
-3. Clique em "Entrar com Google" (exige client id valido para fluxo real; sem configuracao voce pode enviar manualmente um token JWT de teste para `/auth/google/callback`).
-4. Crie projetos, explore layouts, fa�a upload das imagens para o MinIO usando os endpoints `/uploads/presign` + `/assets`.
+3. Clique em "Entrar com Google" (exige client id valido). Em desenvolvimento, use o formulario "Entrar em modo desenvolvimento" para receber um token local instantaneo.
+4. Crie projetos, explore layouts, faça upload das imagens para o MinIO usando os endpoints `/uploads/presign` + `/assets`.
 
 ## Estrutura de pastas
 ```
@@ -103,3 +105,5 @@ MyAlbumPro/
 - Integrar pipeline de CI/CD (build + testes + lint) e enviar imagem para registry.
 
 Bom uso do MyAlbumPro! Abra issues/sugestoes caso precise de novos recursos.
+
+
