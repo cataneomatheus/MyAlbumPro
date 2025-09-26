@@ -37,6 +37,17 @@ services:
     environment:
       ASPNETCORE_ENVIRONMENT: Development
       ASPNETCORE_URLS: http://+:8080
+      Jwt__Issuer: MyAlbumPro
+      Jwt__Audience: MyAlbumPro
+      Jwt__SigningKey: ${JWT_SIGNING_KEY:-change-me-development-secret}
+      Google__ClientId: ${GOOGLE_CLIENT_ID:-missing-google-client-id}
+      Storage__Endpoint: minio:9000
+      Storage__UseSsl: "false"
+      Storage__AccessKey: minioadmin
+      Storage__SecretKey: minioadmin
+      Storage__AssetsBucket: albums
+      Storage__ThumbnailsBucket: thumbnails
+      Database__ConnectionString: Host=postgres;Port=5432;Database=albums;Username=postgres;Password=postgres
     depends_on:
       postgres:
         condition: service_healthy
@@ -64,14 +75,14 @@ services:
     build:
       context: ./frontend/app
       dockerfile: Dockerfile
+      args:
+        VITE_API_BASE: ${WEB_API_BASE:-http://localhost:8080}
+        VITE_GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID:-missing-google-client-id}
     container_name: map_web
-    environment:
-      VITE_API_BASE: http://localhost:8080
-      VITE_GOOGLE_CLIENT_ID: ""
     depends_on:
       - api
     ports:
-      - "5173:5173"
+      - "8081:80"
 
 volumes:
   pgdata:

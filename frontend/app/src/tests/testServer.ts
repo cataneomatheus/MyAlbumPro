@@ -68,6 +68,30 @@ export const handlers = [
     return HttpResponse.json(body);
   }),
   http.get(`${apiUrl}/assets`, () => HttpResponse.json(sampleAssets)),
+  http.get(`${apiUrl}/me`, () =>
+    HttpResponse.json({ userId: 'user-1', name: 'Alice', email: 'alice@example.com', pictureUrl: '' }),
+  ),
+  http.post(`${apiUrl}/auth/google/callback`, () =>
+    HttpResponse.json({
+      userId: 'user-1',
+      accessToken: 'jwt-token',
+      expiresAt: new Date().toISOString(),
+      name: 'Alice',
+      email: 'alice@example.com',
+      pictureUrl: '',
+    }),
+  ),
+  http.post(`${apiUrl}/auth/signout`, () => HttpResponse.json(null, { status: 204 })),
 ];
 
 export const server = setupServer(...handlers);
+
+
+
+
+
+
+
+
+
+

@@ -59,4 +59,21 @@ export type AuthUser = {
   userId: string;
   name: string;
   email: string;
+  pictureUrl?: string;
 };
+
+export type AuthSession = {
+  accessToken: string;
+  expiresAt: string;
+  user: AuthUser;
+};
+
+
+
+
+
+
+
+
+
+

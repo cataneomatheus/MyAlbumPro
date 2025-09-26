@@ -98,6 +98,7 @@ C:\Users\matheus.cataneo\MyAlbumPro\backend\tests\MyAlbumPro.UnitTests\obj\Debug
 C:\Users\matheus.cataneo\MyAlbumPro\backend\tests\MyAlbumPro.UnitTests\obj\Debug\net8.0\MyAlbumPro.UnitTests.AssemblyInfoInputs.cache
 C:\Users\matheus.cataneo\MyAlbumPro\backend\tests\MyAlbumPro.UnitTests\obj\Debug\net8.0\MyAlbumPro.UnitTests.AssemblyInfo.cs
 C:\Users\matheus.cataneo\MyAlbumPro\backend\tests\MyAlbumPro.UnitTests\obj\Debug\net8.0\MyAlbumPro.UnitTests.csproj.CoreCompileInputs.cache
+C:\Users\matheus.cataneo\MyAlbumPro\backend\tests\MyAlbumPro.UnitTests\obj\Debug\net8.0\MyAlbumPro.UnitTests.sourcelink.json
 C:\Users\matheus.cataneo\MyAlbumPro\backend\tests\MyAlbumPro.UnitTests\obj\Debug\net8.0\MyAlbumP.DD744469.Up2Date
 C:\Users\matheus.cataneo\MyAlbumPro\backend\tests\MyAlbumPro.UnitTests\obj\Debug\net8.0\MyAlbumPro.UnitTests.dll
 C:\Users\matheus.cataneo\MyAlbumPro\backend\tests\MyAlbumPro.UnitTests\obj\Debug\net8.0\refint\MyAlbumPro.UnitTests.dll

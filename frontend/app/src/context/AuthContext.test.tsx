@@ -1,8 +1,9 @@
-import type { ReactNode } from 'react';
+﻿import type { ReactNode } from 'react';
 import { renderHook, act } from '@testing-library/react';
 import { describe, expect, it, vi, beforeEach, type Mock } from 'vitest';
 import { AuthProvider, useAuth } from './AuthContext';
 import { api, ApiError } from '../lib/api';
+import { clearSession } from '../lib/session';
 
 vi.mock('../lib/api', () => {
   return {
@@ -21,15 +22,30 @@ vi.mock('../lib/api', () => {
   };
 });
 
+vi.mock('../lib/session', () => {
+  let session: { userId: string; name: string; email: string } | null = null;
+  return {
+    __esModule: true,
+    getSession: vi.fn(() => (session ? { accessToken: 'token', expiresAt: 'date', user: session } : null)),
+    setSession: vi.fn((value) => {
+      session = value ? value.user : null;
+    }),
+    clearSession: vi.fn(() => {
+      session = null;
+    }),
+  };
+});
+
 type WrapperProps = { children: ReactNode };
 const wrapper = ({ children }: WrapperProps) => <AuthProvider>{children}</AuthProvider>;
 
 describe('AuthContext', () => {
   beforeEach(() => {
     vi.resetAllMocks();
+    clearSession();
   });
 
-  it('updates user', async () => {
+  it('updates user when refreshing', async () => {
     (api.getMe as unknown as Mock).mockResolvedValue({ userId: '1', name: 'Alice', email: 'alice@example.com' });
     const { result } = renderHook(() => useAuth(), { wrapper });
     await act(async () => {
@@ -69,3 +85,13 @@ describe('AuthContext', () => {
     expect(result.current.user).toBeNull();
   });
 });
+
+
+
+
+
+
+
+
+
+

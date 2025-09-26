@@ -1,6 +1,7 @@
-﻿import { createContext, useContext, useEffect, useMemo, useState, type ReactNode } from 'react';
+﻿import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from 'react';
 import type { AuthUser } from '../types';
 import { api, ApiError } from '../lib/api';
+import { getSession, setSession, clearSession } from '../lib/session';
 
 interface AuthContextValue {
   user: AuthUser | null;
@@ -13,57 +14,75 @@ interface AuthContextValue {
 const AuthContext = createContext<AuthContextValue | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
-  const [user, setUser] = useState<AuthUser | null>(null);
+  const [user, setUserState] = useState<AuthUser | null>(() => getSession()?.user ?? null);
   const [isLoading, setIsLoading] = useState(true);
 
-  useEffect(() => {
-    let active = true;
-    async function load() {
-      try {
-        setIsLoading(true);
-        const current = await api.getMe();
-        if (active) {
-          setUser(current);
-        }
-      } catch (error) {
-        if (error instanceof ApiError && error.code === 'UNAUTHORIZED') {
-          setUser(null);
-        }
-      } finally {
-        if (active) {
-          setIsLoading(false);
-        }
-      }
+  const syncUser = useCallback((value: AuthUser | null) => {
+    setUserState(value);
+    if (!value) {
+      clearSession();
+      return;
     }
-    load();
-    return () => {
-      active = false;
-    };
+
+    const session = getSession();
+    if (session) {
+      setSession({ ...session, user: value });
+    }
+  }, []);
+
+  const refresh = useCallback(async () => {
+    try {
+      setIsLoading(true);
+      const current = await api.getMe();
+      const session = getSession();
+      if (session) {
+        setSession({ ...session, user: current });
+      }
+      setUserState(current);
+    } catch (error) {
+      if (error instanceof ApiError && error.code === 'UNAUTHORIZED') {
+        clearSession();
+        setUserState(null);
+      }
+      throw error;
+    } finally {
+      setIsLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    const session = getSession();
+    if (!session) {
+      setIsLoading(false);
+      return;
+    }
+
+    setUserState(session.user);
+    refresh().catch((error) => {
+      if (error instanceof ApiError && error.code === 'UNAUTHORIZED') {
+        return;
+      }
+      console.error('Falha ao restaurar Sessao', error);
+    });
+  }, [refresh]);
+
+  const signOut = useCallback(async () => {
+    try {
+      await api.signOut();
+    } finally {
+      clearSession();
+      setUserState(null);
+      setIsLoading(false);
+    }
   }, []);
 
   const value = useMemo<AuthContextValue>(() => ({
     user,
     isLoading,
-    setUser,
-    refresh: async () => {
-      try {
-        setIsLoading(true);
-        const current = await api.getMe();
-        setUser(current);
-      } catch (error) {
-        if (error instanceof ApiError && error.code === 'UNAUTHORIZED') {
-          setUser(null);
-        }
-        throw error;
-      } finally {
-        setIsLoading(false);
-      }
-    },
-    signOut: async () => {
-      await api.signOut();
-      setUser(null);
-    },
-  }), [user, isLoading]);
+    setUser: syncUser,
+    refresh,
+    signOut,
+  }), [user, isLoading, syncUser, refresh, signOut]);
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
@@ -75,3 +94,13 @@ export function useAuth() {
   }
   return ctx;
 }
+
+
+
+
+
+
+
+
+
+

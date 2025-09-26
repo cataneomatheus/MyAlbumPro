@@ -35,7 +35,7 @@ describe('EditorToolbar', () => {
     fireEvent.click(screen.getByRole('button', { name: /Desfazer/i }));
     fireEvent.click(screen.getByRole('button', { name: /Refazer/i }));
     fireEvent.click(screen.getByRole('button', { name: /Autopreencher/i }));
-    fireEvent.click(screen.getByRole('button', { name: /Pré-visualizar/i }));
+    fireEvent.click(screen.getByRole('button', { name: /Pre-visualizar/i }));
     fireEvent.click(screen.getByRole('button', { name: /Salvar/i }));
 
     expect(onSize).toHaveBeenCalledWith('40x40');
@@ -46,3 +46,13 @@ describe('EditorToolbar', () => {
     expect(onSave).toHaveBeenCalled();
   });
 });
+
+
+
+
+
+
+
+
+
+

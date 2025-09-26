@@ -1,16 +1,30 @@
-FROM node:20-alpine
+FROM node:20-alpine AS build
+
+ENV NPM_TOKEN="" \
+    npm_config__authToken="" \
+    NPM_CONFIG_REGISTRY=https://registry.npmjs.org/
 
 WORKDIR /app
 
 COPY package*.json ./
-RUN npm ci --no-audit --no-fund
+# Remove any npm credentials that may have been baked into previous caches.
+RUN rm -f .npmrc /root/.npmrc /etc/npmrc \
+    && npm ci --no-audit --no-fund
 
 COPY . .
 
-EXPOSE 5173
+ARG VITE_API_BASE=http://localhost:8080
+ARG VITE_GOOGLE_CLIENT_ID=missing-google-client-id
+ENV VITE_API_BASE=$VITE_API_BASE
+ENV VITE_GOOGLE_CLIENT_ID=$VITE_GOOGLE_CLIENT_ID
 
-# Ensure Vite binds to all interfaces
-ENV HOST=0.0.0.0
+RUN npm run build
 
-CMD ["npm", "run", "dev", "--", "--host", "0.0.0.0"]
+FROM nginx:1.27-alpine AS runner
 
+COPY nginx.conf /etc/nginx/conf.d/default.conf
+COPY --from=build /app/dist /usr/share/nginx/html
+
+EXPOSE 80
+
+CMD ["nginx", "-g", "daemon off;"]

@@ -6,6 +6,8 @@ namespace MyAlbumPro.Api.Services;
 
 public sealed class CurrentUserService : ICurrentUserService
 {
+    private const string PictureClaim = "picture";
+
     private readonly IHttpContextAccessor _httpContextAccessor;
 
     public CurrentUserService(IHttpContextAccessor httpContextAccessor)
@@ -26,6 +28,8 @@ public sealed class CurrentUserService : ICurrentUserService
     public string Email => _httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.Email) ?? string.Empty;
 
     public string Name => _httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.Name) ?? string.Empty;
+
+    public string PictureUrl => _httpContextAccessor.HttpContext?.User?.FindFirst(PictureClaim)?.Value ?? string.Empty;
 
     public bool IsAuthenticated => _httpContextAccessor.HttpContext?.User?.Identity?.IsAuthenticated ?? false;
 }

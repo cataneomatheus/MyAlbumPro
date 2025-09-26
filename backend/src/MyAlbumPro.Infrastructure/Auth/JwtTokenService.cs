@@ -1,4 +1,5 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using Microsoft.Extensions.Options;
@@ -19,14 +20,22 @@ public sealed class JwtTokenService : ITokenService
         _signingKey = Encoding.UTF8.GetBytes(_options.SigningKey);
     }
 
-    public TokenResult Generate(Guid userId, string email, string name, IReadOnlyCollection<string> roles)
+    public TokenResult Generate(Guid userId, string email, string name, string pictureUrl, IReadOnlyCollection<string> roles)
     {
         var claims = new List<Claim>
         {
             new Claim(JwtRegisteredClaimNames.Sub, userId.ToString()),
+            new Claim(ClaimTypes.NameIdentifier, userId.ToString()),
             new Claim(JwtRegisteredClaimNames.Email, email),
-            new Claim(JwtRegisteredClaimNames.Name, name)
+            new Claim(ClaimTypes.Email, email),
+            new Claim(JwtRegisteredClaimNames.Name, name),
+            new Claim(ClaimTypes.Name, name)
         };
+
+        if (!string.IsNullOrWhiteSpace(pictureUrl))
+        {
+            claims.Add(new Claim("picture", pictureUrl));
+        }
 
         claims.AddRange(roles.Select(role => new Claim(ClaimTypes.Role, role)));
 

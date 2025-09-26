@@ -1,39 +1,38 @@
-import { fireEvent, screen } from '@testing-library/react';
+﻿import { fireEvent, screen } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import * as googleOAuth from '@react-oauth/google';
 import LoginPage from './LoginPage';
 import { renderWithProviders } from '../tests/utils';
 
 describe('LoginPage', () => {
-  const originalLocation = window.location;
-  let setHref: ReturnType<typeof vi.fn>;
+  let triggerLogin: ReturnType<typeof vi.fn>;
 
   beforeEach(() => {
-    setHref = vi.fn();
-    Object.defineProperty(window, 'location', {
-      configurable: true,
-      value: {
-        origin: 'http://localhost',
-        get href() {
-          return '';
-        },
-        set href(value: string) {
-          setHref(value);
-        },
-      },
-    });
+    triggerLogin = vi.fn();
+    vi.stubEnv('VITE_GOOGLE_CLIENT_ID', 'test-client-id.apps.googleusercontent.com');
+    vi.spyOn(googleOAuth, 'useGoogleLogin').mockReturnValue(triggerLogin);
   });
 
   afterEach(() => {
-    Object.defineProperty(window, 'location', {
-      configurable: true,
-      value: originalLocation,
-    });
+    vi.restoreAllMocks();
+    vi.unstubAllEnvs();
   });
 
-  it('renders Google login button and triggers redirect', () => {
+  it('renders Google login button and triggers Google OAuth flow', () => {
     renderWithProviders(<LoginPage />, { route: '/login' });
     const button = screen.getByRole('button', { name: /Entrar com Google/i });
+    expect(button).not.toBeDisabled();
     fireEvent.click(button);
-    expect(setHref).toHaveBeenCalled();
+    expect(triggerLogin).toHaveBeenCalledTimes(1);
   });
 });
+
+
+
+
+
+
+
+
+
+

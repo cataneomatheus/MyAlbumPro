@@ -55,3 +55,13 @@ export function ThumbnailStrip({ assets }: { assets: Asset[] }) {
 }
 
 export default ThumbnailStrip;
+
+
+
+
+
+
+
+
+
+

@@ -1,4 +1,4 @@
-import type { CSSProperties } from 'react';
+﻿import type { CSSProperties } from 'react';
 import { useDroppable } from '@dnd-kit/core';
 import clsx from 'classnames';
 import { useEditorStore } from '../store/editorStore';
@@ -70,3 +70,13 @@ export function PageCanvas({ layout, page, assets }: { layout: Layout; page: Pag
 }
 
 export default PageCanvas;
+
+
+
+
+
+
+
+
+
+

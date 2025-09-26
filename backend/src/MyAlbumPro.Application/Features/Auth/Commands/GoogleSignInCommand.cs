@@ -32,8 +32,8 @@ public sealed class GoogleSignInCommandHandler : IRequestHandler<GoogleSignInCom
         var payload = await _googleAuthService.ValidateIdTokenAsync(request.IdToken, cancellationToken);
 
         var userId = DeterministicGuid.FromString(payload.Sub);
-        var token = _tokenService.Generate(userId, payload.Email, payload.Name, Array.Empty<string>());
+        var token = _tokenService.Generate(userId, payload.Email, payload.Name, payload.Picture, Array.Empty<string>());
 
-        return new AuthResponse(token.AccessToken, token.ExpiresAt, payload.Name, payload.Email, payload.Picture);
+        return new AuthResponse(userId, token.AccessToken, token.ExpiresAt, payload.Name, payload.Email, payload.Picture);
     }
 }

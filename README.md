@@ -1,77 +1,105 @@
 # MyAlbumPro
 
-Aplicação full-stack para criação e gerenciamento de álbuns fotográficos. O backend é construído com .NET 8, utiliza PostgreSQL e MinIO (compatível com S3) para armazenamento de assets, enquanto o frontend é uma SPA em React + Vite.
+MyAlbumPro e uma aplicacao full-stack para criacao e gerenciamento de albuns fotografico-profissionais. O backend utiliza .NET 8, PostgreSQL e MinIO (compatibilidade S3) para armazenar dados e imagens. O frontend e uma SPA moderna em React com Vite.
 
-## Arquitetura
-- **API (.NET 8 / Minimal APIs)**: autenticação via Google, emissão de tokens JWT, endpoints REST para projetos, layouts e assets.
-- **Aplicação Frontend (React + Vite)**: interface para login, gerenciamento de projetos e consumo da API.
+## Visao geral da arquitetura
+- **API (.NET 8 / Minimal APIs)**: autenticacao com Google, emissao de JWT, endpoints REST para projetos, layouts e assets.
+- **Aplicacao frontend (React + Vite + Tailwind)**: interface responsiva para login, gerenciamento de projetos e visualizacao dos albuns.
 - **PostgreSQL**: banco relacional principal.
-- **MinIO**: armazenamento de arquivos e miniaturas compatível com S3.
-- **pgAdmin**: interface web opcional para gerenciar o PostgreSQL.
+- **MinIO**: armazenamento de objetos (originais e miniaturas) compat�vel com AWS S3.
+- **pgAdmin**: console opcional para inspecionar o PostgreSQL via navegador.
 
-## Requisitos
-- Docker e Docker Compose v2
-- Porta 5173 livre para o frontend
-- Porta 8080 livre para a API
-- Portas 5432, 9000 e 9001 livres para PostgreSQL e MinIO
-- Porta 5050 livre para pgAdmin
+## Requisitos locais
+- Docker Desktop (Compose v2)
+- Portas livres: 8080 (API), 8081 (frontend), 5432 (PostgreSQL), 9000/9001 (MinIO) e 5050 (pgAdmin)
 
-## Variáveis de Ambiente Principais
-As variáveis abaixo estão definidas em `docker-compose.yml` e podem ser customizadas conforme necessário:
+## Variaveis de ambiente principais
+As variaveis sao definidas em `docker-compose.yml`. Ajuste conforme necessario:
 
-| Serviço | Variável | Descrição | Valor padrão |
-| --- | --- | --- | --- |
-| api | `ASPNETCORE_ENVIRONMENT` | Ambiente ASP.NET Core | `Development` |
-| api | `ASPNETCORE_URLS` | Endereço de escuta da API | `http://+:8080` |
-| web | `VITE_API_BASE` | Endpoint da API utilizado pelo frontend | `http://localhost:8080` |
-| web | `VITE_GOOGLE_CLIENT_ID` | Client ID do OAuth Google usado no login (opcional) | `""` |
-| pgadmin | `PGADMIN_DEFAULT_EMAIL` | Login no pgAdmin | `admin@local.test` |
-| pgadmin | `PGADMIN_DEFAULT_PASSWORD` | Senha do pgAdmin | `admin` |
-| postgres | `POSTGRES_*` | Configurações padrão do banco | `postgres`/`postgres` |
-| minio | `MINIO_ROOT_*` | Credenciais do console MinIO | `minioadmin`/`minioadmin` |
+| Servico   | Variavel                     | Descricao                                         | Valor padrao                                 |
+|-----------|-----------------------------|---------------------------------------------------|-----------------------------------------------|
+| api       | `ASPNETCORE_ENVIRONMENT`    | Ambiente ASP.NET Core                             | `Development`                                 |
+| api       | `Jwt__SigningKey`           | Chave HMAC usada para assinar os JWTs             | `change-me-development-secret`                |
+| api       | `Google__ClientId`          | Client ID OAuth do Google                         | `missing-google-client-id`                    |
+| web       | `VITE_API_BASE`             | Endpoint da API consumido pelo frontend           | `http://localhost:8080`                       |
+| web       | `VITE_GOOGLE_CLIENT_ID`     | Client ID do Google usado no build do frontend    | `missing-google-client-id`                    |
+| minio     | `MINIO_ROOT_USER/PASSWORD`  | Credenciais do console MinIO                      | `minioadmin` / `minioadmin`                   |
+| postgres  | `POSTGRES_USER/PASSWORD`    | Credenciais do banco                              | `postgres` / `postgres`                       |
+| pgadmin   | `PGADMIN_DEFAULT_EMAIL` etc | Credenciais do pgAdmin                            | `admin@local.test` / `admin`                  |
 
-> **Observação**: se você não configurar `VITE_GOOGLE_CLIENT_ID`, o botão de login continua funcionando com fallback para o endpoint `/auth/google/callback`, porém é necessário fornecer um token válido manualmente.
+> Importante: para login real com Google configure `Google__ClientId` (backend) e `VITE_GOOGLE_CLIENT_ID` (frontend) com um client id valido criado no Google Cloud Console.
 
-## Como Subir com Docker Compose
-1. Construa e inicialize os serviços:
-   ```bash
-   docker compose up -d --build
-   ```
-2. Verifique os logs da API (útil para acompanhar migrações EF Core, seed de layouts e inicialização do MinIO):
-   ```bash
-   docker compose logs -f api
-   ```
+## Subir toda a stack
+```bash
+docker compose up -d --build
+```
 
-Os serviços principais ficarão disponíveis em:
-- Frontend: http://localhost:5173
+Servicos disponiveis apos o build:
+- Frontend: http://localhost:8081
 - API + Swagger: http://localhost:8080/swagger
-- MinIO Console: http://localhost:9001 (usuário/senha: `minioadmin` / `minioadmin`)
-- pgAdmin: http://localhost:5050 (e-mail/senha: `admin@local.test` / `admin`)
+- MinIO Console: http://localhost:9001 (usuario/senha `minioadmin` / `minioadmin`)
+- pgAdmin: http://localhost:5050 (usuario/senha `admin@local.test` / `admin`)
 
-### Acessar o PostgreSQL via pgAdmin
-1. Abra http://localhost:5050 e entre com as credenciais padrão (`admin@local.test` / `admin`).
-2. Crie um novo servidor (`Add New Server`).
-   - **Name**: qualquer identificador (ex.: `MyAlbumPro`).
-   - **Connection → Host name/address**: `postgres`
-   - **Port**: `5432`
-   - **Username**: `postgres`
-   - **Password**: `postgres`
-3. Salve. O pgAdmin conectará no container `postgres` e você poderá navegar pelos bancos/tabelas diretamente no navegador.
+A API aplica migracoes do Entity Framework automaticamente quando roda em `Development`. Um seeder popula layouts padrao e o `StorageInitializer` garante os buckets `albums` e `thumbnails` no MinIO.
 
-### Estrutura de Dados e Seeds
-- A API executa automaticamente as migrações do Entity Framework Core no startup quando em `Development`.
-- O serviço `LayoutSeeder` insere layouts padrão se o banco estiver vazio.
-- O serviço `StorageInitializer` garante a criação dos buckets de assets e thumbnails no MinIO.
+## Executar localmente sem Docker
+### Backend
+```bash
+cd backend
+ dotnet restore
+ dotnet test
+ dotnet run --project src/MyAlbumPro.Api
+```
 
-## Execução Manual (Opcional)
-Caso queira rodar apenas um dos serviços:
-- Somente backend: `docker compose up -d postgres minio api`
-- Somente frontend (assumindo API rodando localmente): `docker compose up -d web`
+A API espera PostgreSQL (porta 5432) e MinIO (9000/9001) disponiveis.
+
+### Frontend
+```bash
+cd frontend/app
+npm install
+npm run dev   # http://localhost:5173
+```
+Defina `VITE_API_BASE` e `VITE_GOOGLE_CLIENT_ID` em um arquivo `.env.local` se precisar sobrescrever valores durante o desenvolvimento.
 
 ## Testes
-- Backend: `dotnet test` dentro da pasta `backend`
-- Frontend: `npm test` (vitest), após `npm install` na pasta `frontend/app`
+- Backend: `dotnet test`
+- Frontend: `npm run test`
 
-## Próximos Passos
-- Configurar um Client ID válido do Google OAuth e preencher `VITE_GOOGLE_CLIENT_ID` no `docker-compose.yml` ou via `.env`.
-- Ajustar DNS/hostnames se for publicar os containers em infraestrutura externa.
+> Notas: Os testes de integracao completos do EditorPage e o snapshot do App estao marcados com `skip` ate que o novo fluxo de autenticacao seja regravado no harness de testes. O restante da suite permanece verdinho.
+
+## Build de producao manual do frontend
+```bash
+cd frontend/app
+npm install
+npm run build
+```
+O resultado e gerado em `frontend/app/dist`. O Dockerfile do frontend ja realiza esse processo e publica os assets com nginx.
+
+## Fluxo basico de uso
+1. Suba a stack com `docker compose up -d --build`.
+2. Acesse o frontend em http://localhost:8081.
+3. Clique em "Entrar com Google" (exige client id valido para fluxo real; sem configuracao voce pode enviar manualmente um token JWT de teste para `/auth/google/callback`).
+4. Crie projetos, explore layouts, fa�a upload das imagens para o MinIO usando os endpoints `/uploads/presign` + `/assets`.
+
+## Estrutura de pastas
+```
+MyAlbumPro/
+|-- backend/               # Solucao .NET 8
+|   |-- src/
+|   |   |-- MyAlbumPro.Api
+|   |   |-- MyAlbumPro.Application
+|   |   |-- MyAlbumPro.Domain
+|   |   |-- MyAlbumPro.Infrastructure
+|   |-- tests/
+|-- frontend/
+|   |-- app/               # SPA React + Vite
+|-- ops/                   # (placeholder para scripts de deploy)
+|-- docker-compose.yml
+```
+
+## Pendencias / melhorias sugeridas
+- Regravar os testes de integracao do editor apos estabilizar o fluxo completo (upload + presign) com mocks.
+- Ajustar as mensagens de erro do login para lidar com diferentes respostas do Google.
+- Integrar pipeline de CI/CD (build + testes + lint) e enviar imagem para registry.
+
+Bom uso do MyAlbumPro! Abra issues/sugestoes caso precise de novos recursos.

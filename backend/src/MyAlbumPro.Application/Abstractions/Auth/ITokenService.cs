@@ -4,5 +4,5 @@ public record TokenResult(string AccessToken, DateTimeOffset ExpiresAt, string R
 
 public interface ITokenService
 {
-    TokenResult Generate(Guid userId, string email, string name, IReadOnlyCollection<string> roles);
+    TokenResult Generate(Guid userId, string email, string name, string pictureUrl, IReadOnlyCollection<string> roles);
 }

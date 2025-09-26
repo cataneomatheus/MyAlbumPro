@@ -27,6 +27,11 @@ public sealed class ListAssetsQueryHandler : IRequestHandler<ListAssetsQuery, IR
     public async Task<IReadOnlyCollection<AssetDto>> Handle(ListAssetsQuery request, CancellationToken cancellationToken)
     {
         var assets = await _assetRepository.ListByOwnerAsync(_currentUser.UserId, cancellationToken);
-        return assets.Select(asset => _mapper.Map<AssetDto>(asset)).ToList();
+
+        return assets.Select(asset =>
+        {
+            var dto = _mapper.Map<AssetDto>(asset);
+            return dto with { ThumbnailUrl = $"/assets/{dto.AssetId}/thumbnail" };
+        }).ToList();
     }
 }

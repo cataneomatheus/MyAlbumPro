@@ -20,9 +20,9 @@ export function FullScreenViewer({ project, layouts, assets, onClose }: ViewerPr
     <div className="fixed inset-0 z-50 flex flex-col bg-slate-950/95 text-slate-50">
       <header className="flex items-center justify-between border-b border-slate-800 px-6 py-3">
         <div>
-          <h2 className="text-lg font-semibold">Visualização</h2>
+          <h2 className="text-lg font-semibold">Visualizacao</h2>
           <p className="text-xs text-slate-400">
-            Página {pageIndex + 1} de {project.pages.length}
+            Pagina {pageIndex + 1} de {project.pages.length}
           </p>
         </div>
         <button
@@ -33,7 +33,7 @@ export function FullScreenViewer({ project, layouts, assets, onClose }: ViewerPr
         </button>
       </header>
       <main className="flex flex-1 items-center justify-center p-6">
-        {layout ? <PageCanvas layout={layout} page={page} assets={assetMap} /> : <p>Layout não encontrado</p>}
+        {layout ? <PageCanvas layout={layout} page={page} assets={assetMap} /> : <p>Layout Nao encontrado</p>}
       </main>
       <footer className="flex items-center justify-between border-t border-slate-800 px-6 py-3">
         <button
@@ -41,14 +41,14 @@ export function FullScreenViewer({ project, layouts, assets, onClose }: ViewerPr
           onClick={() => setPageIndex((idx) => Math.max(0, idx - 1))}
           disabled={pageIndex === 0}
         >
-          Página anterior
+          Pagina anterior
         </button>
         <button
           className="rounded-lg border border-slate-700 px-3 py-1 text-sm hover:border-slate-500"
           onClick={() => setPageIndex((idx) => Math.min(project.pages.length - 1, idx + 1))}
           disabled={pageIndex === project.pages.length - 1}
         >
-          Próxima página
+          Proxima Pagina
         </button>
       </footer>
     </div>
@@ -56,3 +56,13 @@ export function FullScreenViewer({ project, layouts, assets, onClose }: ViewerPr
 }
 
 export default FullScreenViewer;
+
+
+
+
+
+
+
+
+
+

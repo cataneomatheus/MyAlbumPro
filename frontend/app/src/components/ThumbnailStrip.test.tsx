@@ -25,3 +25,13 @@ describe('ThumbnailStrip', () => {
     expect(useEditorStore.getState().selectedAssetId).toBe('asset-1');
   });
 });
+
+
+
+
+
+
+
+
+
+

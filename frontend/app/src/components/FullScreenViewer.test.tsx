@@ -48,13 +48,23 @@ describe('FullScreenViewer', () => {
     render(
       <FullScreenViewer project={project} layouts={layouts} assets={assets} onClose={onClose} />,
     );
-    expect(screen.getByText(/Visualização/i)).toBeInTheDocument();
+    expect(screen.getByText(/Visualizacao/i)).toBeInTheDocument();
     fireEvent.click(screen.getByRole('button', { name: /Fechar/i }));
     expect(onClose).toHaveBeenCalled();
   });
   it('renders fallback when layout missing', () => {
     render(<FullScreenViewer project={project} layouts={[]} assets={assets} onClose={() => {}} />);
-    expect(screen.getByText(/Layout não encontrado/i)).toBeInTheDocument();
+    expect(screen.getByText(/Layout Nao encontrado/i)).toBeInTheDocument();
   });
 });
+
+
+
+
+
+
+
+
+
+
 

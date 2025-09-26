@@ -66,7 +66,7 @@ export function EditorToolbar({
           className="rounded-lg border border-slate-700 px-3 py-1.5 text-slate-200 transition hover:border-slate-500"
           onClick={onPreview}
         >
-          Pré-visualizar
+          Pre-visualizar
         </button>
         <button
           className="rounded-lg bg-emerald-500 px-3 py-1.5 font-medium text-white hover:bg-emerald-400"
@@ -80,3 +80,13 @@ export function EditorToolbar({
 }
 
 export default EditorToolbar;
+
+
+
+
+
+
+
+
+
+

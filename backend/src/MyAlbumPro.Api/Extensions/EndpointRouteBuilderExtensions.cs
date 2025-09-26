@@ -24,6 +24,9 @@ public static class EndpointRouteBuilderExtensions
             return Results.Ok(response);
         });
 
+        builder.MapPost("/auth/signout", () => Results.NoContent())
+            .RequireAuthorization();
+
         builder.MapGet("/me", (ICurrentUserService currentUser) =>
         {
             if (!currentUser.IsAuthenticated)
@@ -35,7 +38,8 @@ public static class EndpointRouteBuilderExtensions
             {
                 currentUser.UserId,
                 currentUser.Email,
-                currentUser.Name
+                currentUser.Name,
+                PictureUrl = currentUser.PictureUrl
             });
         }).RequireAuthorization();
 

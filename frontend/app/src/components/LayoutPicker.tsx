@@ -12,7 +12,7 @@ export function LayoutPicker({
 }) {
   return (
     <div className="space-y-3">
-      <h3 className="text-sm font-semibold text-slate-300">Layouts disponíveis</h3>
+      <h3 className="text-sm font-semibold text-slate-300">Layouts disponiveis</h3>
       <div className="grid grid-cols-2 gap-3">
         {layouts.map((layout) => (
           <button
@@ -44,3 +44,13 @@ export function LayoutPicker({
 }
 
 export default LayoutPicker;
+
+
+
+
+
+
+
+
+
+

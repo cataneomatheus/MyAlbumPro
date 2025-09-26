@@ -90,3 +90,13 @@ describe('useEditorStore', () => {
     expect(updated?.pages[0].slots[0].assetId).toBeUndefined();
   });
 });
+
+
+
+
+
+
+
+
+
+

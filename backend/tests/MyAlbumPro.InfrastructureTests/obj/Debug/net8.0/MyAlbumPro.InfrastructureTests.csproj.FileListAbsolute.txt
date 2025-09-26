@@ -27,6 +27,7 @@ C:\Users\matheus.cataneo\MyAlbumPro\backend\tests\MyAlbumPro.InfrastructureTests
 C:\Users\matheus.cataneo\MyAlbumPro\backend\tests\MyAlbumPro.InfrastructureTests\bin\Debug\net8.0\Microsoft.VisualStudio.CodeCoverage.Shim.dll
 C:\Users\matheus.cataneo\MyAlbumPro\backend\tests\MyAlbumPro.InfrastructureTests\bin\Debug\net8.0\Microsoft.EntityFrameworkCore.dll
 C:\Users\matheus.cataneo\MyAlbumPro\backend\tests\MyAlbumPro.InfrastructureTests\bin\Debug\net8.0\Microsoft.EntityFrameworkCore.Abstractions.dll
+C:\Users\matheus.cataneo\MyAlbumPro\backend\tests\MyAlbumPro.InfrastructureTests\bin\Debug\net8.0\Microsoft.EntityFrameworkCore.InMemory.dll
 C:\Users\matheus.cataneo\MyAlbumPro\backend\tests\MyAlbumPro.InfrastructureTests\bin\Debug\net8.0\Microsoft.EntityFrameworkCore.Relational.dll
 C:\Users\matheus.cataneo\MyAlbumPro\backend\tests\MyAlbumPro.InfrastructureTests\bin\Debug\net8.0\Microsoft.Extensions.Caching.Abstractions.dll
 C:\Users\matheus.cataneo\MyAlbumPro\backend\tests\MyAlbumPro.InfrastructureTests\bin\Debug\net8.0\Microsoft.Extensions.Caching.Memory.dll
@@ -158,10 +159,10 @@ C:\Users\matheus.cataneo\MyAlbumPro\backend\tests\MyAlbumPro.InfrastructureTests
 C:\Users\matheus.cataneo\MyAlbumPro\backend\tests\MyAlbumPro.InfrastructureTests\obj\Debug\net8.0\MyAlbumPro.InfrastructureTests.AssemblyInfoInputs.cache
 C:\Users\matheus.cataneo\MyAlbumPro\backend\tests\MyAlbumPro.InfrastructureTests\obj\Debug\net8.0\MyAlbumPro.InfrastructureTests.AssemblyInfo.cs
 C:\Users\matheus.cataneo\MyAlbumPro\backend\tests\MyAlbumPro.InfrastructureTests\obj\Debug\net8.0\MyAlbumPro.InfrastructureTests.csproj.CoreCompileInputs.cache
+C:\Users\matheus.cataneo\MyAlbumPro\backend\tests\MyAlbumPro.InfrastructureTests\obj\Debug\net8.0\MyAlbumPro.InfrastructureTests.sourcelink.json
 C:\Users\matheus.cataneo\MyAlbumPro\backend\tests\MyAlbumPro.InfrastructureTests\obj\Debug\net8.0\MyAlbumP.2D1A6F92.Up2Date
 C:\Users\matheus.cataneo\MyAlbumPro\backend\tests\MyAlbumPro.InfrastructureTests\obj\Debug\net8.0\MyAlbumPro.InfrastructureTests.dll
 C:\Users\matheus.cataneo\MyAlbumPro\backend\tests\MyAlbumPro.InfrastructureTests\obj\Debug\net8.0\refint\MyAlbumPro.InfrastructureTests.dll
 C:\Users\matheus.cataneo\MyAlbumPro\backend\tests\MyAlbumPro.InfrastructureTests\obj\Debug\net8.0\MyAlbumPro.InfrastructureTests.pdb
 C:\Users\matheus.cataneo\MyAlbumPro\backend\tests\MyAlbumPro.InfrastructureTests\obj\Debug\net8.0\MyAlbumPro.InfrastructureTests.genruntimeconfig.cache
 C:\Users\matheus.cataneo\MyAlbumPro\backend\tests\MyAlbumPro.InfrastructureTests\obj\Debug\net8.0\ref\MyAlbumPro.InfrastructureTests.dll
-C:\Users\matheus.cataneo\MyAlbumPro\backend\tests\MyAlbumPro.InfrastructureTests\bin\Debug\net8.0\Microsoft.EntityFrameworkCore.InMemory.dll

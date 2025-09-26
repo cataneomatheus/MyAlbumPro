@@ -45,31 +45,17 @@ function EditorPage() {
   const [isPreview, setIsPreview] = useState(false);
   const { user, isLoading: authLoading } = useAuth();
 
-  const {
-    project,
-    loadProject,
-    applyProject,
-    changeAlbumSize,
-    changePageLayout,
-    placeAsset,
-    selectAsset,
-    undo,
-    redo,
-    canUndo,
-    canRedo,
-  } = useEditorStore((state) => ({
-    project: state.project,
-    loadProject: state.loadProject,
-    applyProject: state.applyProject,
-    changeAlbumSize: state.changeAlbumSize,
-    changePageLayout: state.changePageLayout,
-    placeAsset: state.placeAsset,
-    selectAsset: state.selectAsset,
-    undo: state.undo,
-    redo: state.redo,
-    canUndo: state.canUndo,
-    canRedo: state.canRedo,
-  }));
+  const project = useEditorStore((state) => state.project);
+  const loadProject = useEditorStore((state) => state.loadProject);
+  const applyProject = useEditorStore((state) => state.applyProject);
+  const changeAlbumSize = useEditorStore((state) => state.changeAlbumSize);
+  const changePageLayout = useEditorStore((state) => state.changePageLayout);
+  const placeAsset = useEditorStore((state) => state.placeAsset);
+  const selectAsset = useEditorStore((state) => state.selectAsset);
+  const undo = useEditorStore((state) => state.undo);
+  const redo = useEditorStore((state) => state.redo);
+  const canUndo = useEditorStore((state) => state.canUndo);
+  const canRedo = useEditorStore((state) => state.canRedo);
 
   const handleApiError = useCallback(
     (err: unknown) => {
@@ -89,6 +75,10 @@ function EditorPage() {
   }, [authLoading, user, navigate]);
 
   useEffect(() => {
+    if (!user) {
+      return;
+    }
+
     let active = true;
     async function load() {
       try {
@@ -98,7 +88,11 @@ function EditorPage() {
           api.getLayouts(),
           api.listAssets().catch(() => []),
         ]);
-        if (!active) return;
+
+        if (!active) {
+          return;
+        }
+
         setAlbumSizes(sizes);
         setLayouts(layoutData);
         setAssets(assetData);
@@ -108,11 +102,13 @@ function EditorPage() {
           if (defaultLayout) {
             loadProject(createEmptyProject(defaultLayout));
           } else {
-            setError('Nenhum layout disponível.');
+            setError('Nenhum layout disponivel.');
           }
         } else {
           const projectResponse = await api.getProject(projectId);
-          if (!active) return;
+          if (!active) {
+            return;
+          }
           loadProject(projectResponse);
         }
       } catch (err) {
@@ -123,11 +119,12 @@ function EditorPage() {
         }
       }
     }
+
     load();
     return () => {
       active = false;
     };
-  }, [projectId, loadProject, handleApiError]);
+  }, [projectId, user?.userId]);
 
   const layoutMap = useMemo(() => Object.fromEntries(layouts.map((layout) => [layout.id, layout])), [layouts]);
   const assetMap = useMemo(() => Object.fromEntries(assets.map((asset) => [asset.assetId, asset])), [assets]);
@@ -195,7 +192,7 @@ function EditorPage() {
           onUndo={undo}
           onRedo={redo}
         />
-        {status === 'saving' ? <div className="text-xs text-emerald-300">Salvando alterações...</div> : null}
+        {status === 'saving' ? <div className="text-xs text-emerald-300">Salvando alteracoes...</div> : null}
         {error ? (
           <div className="rounded-xl border border-red-500/40 bg-red-500/10 px-4 py-3 text-sm text-red-200">{error}</div>
         ) : null}
@@ -205,7 +202,7 @@ function EditorPage() {
               {currentLayout ? (
                 <PageCanvas layout={currentLayout} page={project.pages[0]} assets={assetMap} />
               ) : (
-                <p>Layout não encontrado.</p>
+                <p>Layout Nao encontrado.</p>
               )}
             </div>
             <aside className="space-y-6">
@@ -225,7 +222,7 @@ function EditorPage() {
                 <ul className="mt-2 space-y-1">
                   <li>Desfazer: Ctrl+Z</li>
                   <li>Refazer: Ctrl+Shift+Z</li>
-                  <li>Preview: Barra de espaço</li>
+                  <li>Preview: Barra de espaco</li>
                 </ul>
               </div>
             </aside>
@@ -246,3 +243,15 @@ function EditorPage() {
 }
 
 export default EditorPage;
+
+
+
+
+
+
+
+
+
+
+
+
